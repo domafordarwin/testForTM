@@ -6,4 +6,4 @@ av
 tensorflow
 opencv-python-headless
 ffmpeg
-streamlit_webrtc
+streamlit-webrtc
