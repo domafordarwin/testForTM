@@ -3,7 +3,7 @@ import threading
 import cv2
 import numpy as np
 from keras.models import load_model
-from streamlit_webrtc import webrtc_streamer, RTCConfiguration, WebRtcMode
+from streamlit-webrtc import webrtc_streamer, RTCConfiguration, WebRtcMode
 import av
 RTC_CONFIGURATION = RTCConfiguration(
      {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
