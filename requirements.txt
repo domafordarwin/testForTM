@@ -1,3 +1,8 @@
+streamlit
+threading
+cv2
+numpy
+av
 tensorflow
 opencv-python-headless
 ffmpeg
