@@ -15,12 +15,12 @@ if img_file_buffer is not None:
     probabilities = model.predict(image)
 
 if probabilities[0,0] > 0.8:
-        prob = round(probabilities[0,0] * 100,2)
-        st.write(f"I'm {prob}% sure that's {classes[0]}!")
-    elif probabilities[0,1] > 0.8:
-        prob = round(probabilities[0,1] * 100,2)
-        st.write(f"I'm {prob}% sure that's {classes[1]}!")
-    else:
-        st.write("I'm not confident that I know what this is! ")
+    prob = round(probabilities[0,0] * 100,2)
+    st.write(f"I'm {prob}% sure that's {classes[0]}!")
+elif probabilities[0,1] > 0.8:
+    prob = round(probabilities[0,1] * 100,2)
+    st.write(f"I'm {prob}% sure that's {classes[1]}!")
+else:
+    st.write("I'm not confident that I know what this is! ")
 
-    st.balloons()
+st.balloons()
