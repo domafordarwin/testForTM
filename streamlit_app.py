@@ -6,7 +6,7 @@ from keras.models import load_model
 from streamlit_webrtc import webrtc_streamer, RTCConfiguration, WebRtcMode
 import av
 RTC_CONFIGURATION = RTCConfiguration(
-     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
 )
 
 model = load_model('keras_model.h5', compile = False)
@@ -26,8 +26,7 @@ st.subheader('The image detection tool you definitely do not need in your life')
 ctx = webrtc_streamer(key="example", 
                 video_frame_callback=video_frame_callback,
                 rtc_configuration = RTC_CONFIGURATION,
-                mode=WebRtcMode.SENDRECV
-                     )
+                mode=WebRtcMode.SENDRECV)
 st.write('Pikachu')
 pikachu = st.progress(0)
 st.write('Eevee')
