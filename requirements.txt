@@ -1,5 +1,6 @@
 tensorflow
 opencv-python-headless
 ffmpeg
-streamlit-webrtc
 streamlit
+streamlit-drawable-canvas==0.9.2
+streamlit-webrtc
