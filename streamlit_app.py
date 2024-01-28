@@ -3,11 +3,11 @@ import threading
 import cv2
 import numpy as np
 from keras.models import load_model
-from streamlit_webrtc import webrtc_streamer #, RTCConfiguration, WebRtcMode
+from streamlit_webrtc import webrtc_streamer, RTCConfiguration, WebRtcMode
 import av
-# RTC_CONFIGURATION = RTCConfiguration(
-#     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
-# )
+RTC_CONFIGURATION = RTCConfiguration(
+     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+)
 
 model = load_model('keras_model.h5', compile = False)
 lock = threading.Lock() 
@@ -24,9 +24,9 @@ st.title('Is it Pikachu or Eevee!?')
 st.subheader('The image detection tool you definitely do not need in your life')
 
 ctx = webrtc_streamer(key="example", 
-                video_frame_callback=video_frame_callback #,
-                # rtc_configuration = RTC_CONFIGURATION,
-                # mode=WebRtcMode.SENDRECV
+                video_frame_callback=video_frame_callback,
+                rtc_configuration = RTC_CONFIGURATION,
+                mode=WebRtcMode.SENDRECV
                      )
 st.write('Pikachu')
 pikachu = st.progress(0)
