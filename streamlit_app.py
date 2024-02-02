@@ -1,49 +1,35 @@
-import streamlit as st
-import threading
-import cv2
-import numpy as np
 from keras.models import load_model
-from streamlit_webrtc import webrtc_streamer, RTCConfiguration, WebRtcMode
-import av
-RTC_CONFIGURATION = RTCConfiguration(
-    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
-)
+from PIL import Image, ImageOps
+import numpy as np
+import streamlit as st
 
-model = load_model('keras_model.h5', compile = False)
-lock = threading.Lock() 
-img_container = {'img':None}
+st.title('이미지 분류기')
+st.write('고양이 또는 강아지 사진을 업로드하세요.')
 
-def video_frame_callback(frame):
-    img = frame.to_ndarray(format="bgr24")
-    with lock:
-        img_container['img'] = img
-    return frame
+np.set_printoptions(suppress=True)
+model = load_model("keras_Model.h5", compile=False)
+class_names = open("labels.txt", "r").readlines()
 
+data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 
-st.title('Is it Pikachu or Eevee!?')
-st.subheader('The image detection tool you definitely do not need in your life')
+###################################
+# 사용자로부터 이미지 업로드 받기
+uploaded_file = st.file_uploader("Choose a file")
+if uploaded_file is not None:
+    image = Image.open(uploaded_file).convert("RGB")
 
-ctx = webrtc_streamer(key="example", 
-                video_frame_callback=video_frame_callback,
-                rtc_configuration = RTC_CONFIGURATION,
-                mode=WebRtcMode.SENDRECV)
-st.write('Pikachu')
-pikachu = st.progress(0)
-st.write('Eevee')
-eevee = st.progress(0)
+    size = (224, 224)
+    image = ImageOps.fit(image, size, Image.Resampling.LANCZOS)
+    image_array = np.asarray(image)
+    normalized_image_array = (image_array.astype(np.float32) / 127.5) - 1
+    data[0] = normalized_image_array
 
+    prediction = model.predict(data)
+    index = np.argmax(prediction)
+    class_name = class_names[index]
+    confidence_score = prediction[0][index]
 
-while ctx.state.playing:
-    with lock: 
-        img = img_container['img']
-    if img is None:
-        continue
-    img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_AREA)
-    img = np.asarray(img, dtype=np.float32).reshape(1, 224, 224, 3)
-    img = (img / 127.5) - 1
-    probabilities = model.predict(img)
-    
-    pikachu_p = int(probabilities[0,0] * 100)
-    eevee_p = int(probabilities[0,1] * 100)
-    pikachu.progress(pikachu_p)
-    eevee.progress(eevee_p)
+    st.image(image) # 업로드한 이미지를 출력
+
+    st.write("Class:", class_name[2:])
+    st.write("Confidence Score:", confidence_score)
