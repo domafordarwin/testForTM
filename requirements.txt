@@ -1,9 +1,4 @@
-streamlit
-threading
-cv2
+keras
 numpy
-av
-tensorflow
-opencv-python-headless
-ffmpeg
+PIL
 streamlit-webrtc
